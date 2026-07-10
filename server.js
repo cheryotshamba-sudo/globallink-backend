@@ -51,9 +51,7 @@ app.post("/stkpush", async (req, res) => {
 
     } catch (error) {
 
-        console.log(
-            error.response?.data || error.message
-        );
+        console.log("OptimaPay Error:", error.response?.data || error.message);
 
         res.status(500).json({
             success: false,
