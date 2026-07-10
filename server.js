@@ -14,7 +14,9 @@ const OPTIMAPAY_URL = "https://optimapaybridge.co.ke/api/v2/stkpush.php";
 
 app.post("/stkpush", async (req, res) => {
 
-    try {
+    console.log("STK request received:", req.body);
+
+    try { 
 
         const { phone } = req.body;
 
