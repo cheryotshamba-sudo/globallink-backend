@@ -28,16 +28,10 @@ app.post("/stkpush", async (req, res) => {
         }
 
         const data = {
-            payment_account_id: process.env.PAYMENT_ACCOUNT_ID,
-            phone: phone,
-            amount: 100,
-            reference: "GLOBALINK_" + Date.now(),
-            description: "GlobalLink Kenya Account Activation Fee"
-        };
-
-        const response = await axios.post(
-            OPTIMAPAY_URL,
-            data,
+    phone: phone,
+    amount: 100,
+    user_callback_url: "https://globallink-backend.onrender.com/callback"
+};
             {
                 headers: {
                     "X-API-Key": process.env.OPTIMAPAY_KEY,
