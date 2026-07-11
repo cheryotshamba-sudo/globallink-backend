@@ -41,14 +41,19 @@ app.post("/stkpush", async (req, res) => {
 
         // Convert phone format
 
-        phone = phone.toString().replace(/\s/g,"");
+phone = phone.toString().replace(/\s/g, "");
 
+// 07XXXXXXXX -> 2547XXXXXXXX
+if (phone.startsWith("0")) {
+    phone = "254" + phone.substring(1);
+}
 
-        if(phone.startsWith("0")){
+// 7XXXXXXXX -> 2547XXXXXXXX
+if (phone.length === 9 && phone.startsWith("7")) {
+    phone = "254" + phone;
+}
 
-            phone = "254" + phone.substring(1);
-
-        }
+console.log("Final phone:", phone);
 
 
 
