@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 3000;
 const OPTIMAPAY_URL = "https://optimapaybridge.co.ke/api/v2/topup.php";
 
 
-// STK Push
 app.post("/stkpush", async (req, res) => {
 
     console.log("STK request received:", req.body);
@@ -47,8 +46,7 @@ app.post("/stkpush", async (req, res) => {
         );
 
 
-        console.log("OptimaPay Response:");
-        console.log(response.data);
+        console.log("OptimaPay Response:", response.data);
 
 
         res.json(response.data);
@@ -63,8 +61,8 @@ app.post("/stkpush", async (req, res) => {
 
 
         res.status(500).json({
-            success:false,
-            message:"Unable to send STK Push"
+            success: false,
+            message: "Unable to send STK Push"
         });
 
     }
@@ -72,28 +70,26 @@ app.post("/stkpush", async (req, res) => {
 });
 
 
-// Callback
-app.post("/callback", (req,res)=>{
+app.post("/callback", (req, res) => {
 
     console.log("===== CALLBACK =====");
     console.log(req.body);
 
     res.json({
-        success:true
+        success: true
     });
 
 });
 
 
-// Test backend
-app.get("/", (req,res)=>{
+app.get("/", (req, res) => {
 
     res.send("GlobalLink Kenya Backend Running");
 
 });
 
 
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
 
     console.log(`Server running on port ${PORT}`);
 
