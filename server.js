@@ -8,42 +8,38 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 const PORT = process.env.PORT || 3000;
 
 const OPTIMAPAY_URL =
 "https://optimapaybridge.co.ke/api/v2/topup.php";
 
 
+// STK PUSH
 
-app.post("/stkpush", async (req,res)=>{
+app.post("/stkpush", async (req, res) => {
 
     console.log("STK request received:", req.body);
 
 
     try {
 
-
         let phone = req.body.phone;
-let amount = req.body.amount || 100; 
 
 
-
-        if(!phone || !amount){
+        if(!phone){
 
             return res.json({
 
                 success:false,
 
-                message:"Phone and amount are required"
+                message:"Phone number required"
 
             });
 
         }
 
 
-
-        // Convert 07XXXXXXXX to 2547XXXXXXXX
+        // Convert phone format
 
         phone = phone.toString().replace(/\s/g,"");
 
@@ -56,11 +52,11 @@ let amount = req.body.amount || 100;
 
 
 
-        const optimaData = {
+        const data = {
 
             phone: phone,
 
-            amount: Number(amount),
+            amount: 100,
 
             user_callback_url:
             "https://globallink-backend.onrender.com/callback"
@@ -68,8 +64,7 @@ let amount = req.body.amount || 100;
         };
 
 
-
-        console.log("Sending to OptimaPay:", optimaData);
+        console.log("Sending to OptimaPay:", data);
 
 
 
@@ -77,7 +72,7 @@ let amount = req.body.amount || 100;
 
             OPTIMAPAY_URL,
 
-            optimaData,
+            data,
 
             {
 
@@ -118,19 +113,19 @@ let amount = req.body.amount || 100;
 
             success:false,
 
-            message:"Unable to send STK Push"
+            message:"Failed to send STK Push"
 
         });
 
 
     }
 
-
 });
 
 
 
 
+// CALLBACK
 
 app.post("/callback",(req,res)=>{
 
@@ -152,14 +147,13 @@ app.post("/callback",(req,res)=>{
 
 
 
+// TEST
 
 app.get("/",(req,res)=>{
 
     res.send("GlobalLink Kenya Backend Running");
 
 });
-
-
 
 
 
