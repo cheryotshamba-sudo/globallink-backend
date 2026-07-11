@@ -1,4 +1,3 @@
-
 const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
@@ -9,32 +8,45 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
 const PORT = process.env.PORT || 3000;
 
 const OPTIMAPAY_URL =
 "https://optimapaybridge.co.ke/api/v2/topup.php";
 
 
-app.post("/stkpush", async (req, res) => {
+
+app.post("/stkpush", async (req,res)=>{
 
     console.log("STK request received:", req.body);
 
+
     try {
 
-        let { phone, amount } = req.body;
+
+        let phone = req.body.phone;
+        let amount = req.body.amount;
 
 
-        if (!phone || !amount) {
+
+        if(!phone || !amount){
 
             return res.json({
+
                 success:false,
+
                 message:"Phone and amount are required"
+
             });
 
         }
 
 
+
         // Convert 07XXXXXXXX to 2547XXXXXXXX
+
+        phone = phone.toString().replace(/\s/g,"");
+
 
         if(phone.startsWith("0")){
 
@@ -43,18 +55,32 @@ app.post("/stkpush", async (req, res) => {
         }
 
 
+
+        const optimaData = {
+
+            phone: phone,
+
+            amount: Number(amount),
+
+            user_callback_url:
+            "https://globallink-backend.onrender.com/callback"
+
+        };
+
+
+
+        console.log("Sending to OptimaPay:", optimaData);
+
+
+
         const response = await axios.post(
 
             OPTIMAPAY_URL,
 
-            {
-                phone: phone,
-                amount: Number(amount),
-                user_callback_url:
-                "https://globallink-backend.onrender.com/callback"
-            },
+            optimaData,
 
             {
+
                 headers:{
 
                     "X-API-KEY": process.env.OPTIMA_API_KEY,
@@ -70,10 +96,13 @@ app.post("/stkpush", async (req, res) => {
         );
 
 
+
         console.log("OptimaPay Response:", response.data);
 
 
+
         res.json(response.data);
+
 
 
     } catch(error){
@@ -96,15 +125,20 @@ app.post("/stkpush", async (req, res) => {
 
     }
 
+
 });
+
+
 
 
 
 app.post("/callback",(req,res)=>{
 
+
     console.log("===== CALLBACK =====");
 
     console.log(req.body);
+
 
     res.json({
 
@@ -112,7 +146,10 @@ app.post("/callback",(req,res)=>{
 
     });
 
+
 });
+
+
 
 
 
@@ -121,6 +158,8 @@ app.get("/",(req,res)=>{
     res.send("GlobalLink Kenya Backend Running");
 
 });
+
+
 
 
 
