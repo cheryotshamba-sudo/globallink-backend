@@ -9,8 +9,8 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
+const OPTIMAPAY_URL = "https://optimapaybridge.co.ke/api/v2/topup.php";
 
-const OPTIMAPAY_URL = "https://optimapaybridge.co.ke/api/v2/stkpush.php";
 
 app.post("/stkpush", async (req, res) => {
 
