@@ -25,7 +25,7 @@ app.post("/stkpush", async (req,res)=>{
 
 
         let phone = req.body.phone;
-        let amount = req.body.amount;
+let amount = req.body.amount || 100; 
 
 
 
