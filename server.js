@@ -155,15 +155,43 @@ app.post("/callback", (req, res) => {
 
 // PAYMENT STATUS
 
-app.get("/status", (req, res) => {
+app.get("/status", async (req, res) => {
 
-    const checkoutId = req.query.checkout_request_id;
+    try {
 
-    if (!checkoutId) {
-        return res.json({
-            status: "pending"
+        const checkoutId = req.query.checkout_request_id;
+
+        const response = await axios.post(
+            "https://optimapaybridge.co.ke/api/v2/status.php",
+            {
+                checkout_request_id: checkoutId
+            },
+            {
+                headers: {
+                    "X-API-KEY": process.env.OPTIMA_API_KEY,
+                    "X-API-SECRET": process.env.OPTIMA_API_SECRET,
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        res.json(response.data);
+
+    } catch (error) {
+
+        console.log(
+            "Status Error:",
+            error.response?.data || error.message
+        );
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to check payment status"
         });
+
     }
+
+});
 
     res.json({
         status: paymentStatus[checkoutId] || "pending"
