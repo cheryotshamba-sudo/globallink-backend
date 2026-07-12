@@ -62,7 +62,7 @@ console.log("Final phone:", phone);
 
             phone: phone,
 
-            amount: 100,
+            amount: req.body.amount || 100,
 
             user_callback_url:
             "https://globallink-backend.onrender.com/callback"
