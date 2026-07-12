@@ -12,7 +12,8 @@ const PORT = process.env.PORT || 3000;
 
 const OPTIMAPAY_URL =
 "https://optimapaybridge.co.ke/api/v2/topup.php";
-
+// Store payment status
+const paymentStatus = {};
 
 // STK PUSH
 
@@ -132,24 +133,43 @@ console.log("Final phone:", phone);
 
 // CALLBACK
 
-app.post("/callback",(req,res)=>{
-
+app.post("/callback", (req, res) => {
 
     console.log("===== CALLBACK =====");
-
     console.log(req.body);
 
+    // Save the payment status
+    const checkoutId = req.body.checkout_request_id;
+    const status = req.body.status;
+
+    if (checkoutId) {
+        paymentStatus[checkoutId] = status;
+        console.log(`Payment ${checkoutId}: ${status}`);
+    }
 
     res.json({
-
-        success:true
-
+        success: true
     });
-
 
 });
 
+// PAYMENT STATUS
 
+app.get("/status", (req, res) => {
+
+    const checkoutId = req.query.checkout_request_id;
+
+    if (!checkoutId) {
+        return res.json({
+            status: "pending"
+        });
+    }
+
+    res.json({
+        status: paymentStatus[checkoutId] || "pending"
+    });
+
+});
 
 
 // TEST
