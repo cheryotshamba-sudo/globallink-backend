@@ -193,11 +193,7 @@ app.get("/status", async (req, res) => {
 
 });
 
-    res.json({
-        status: paymentStatus[checkoutId] || "pending"
-    });
-
-});
+    
 
 
 // TEST
